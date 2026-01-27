@@ -54,7 +54,7 @@ import rainbowiosImg from './assets/Rainbowios.png';
 import iosAppImg from './assets/IOS.png';
 
 // Resume
-import resumePDF from './assets/LamaDarawshehCV.pdf';
+import resumePDF from './assets/LamaDarawsheh.pdf';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -717,7 +717,7 @@ const App = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 w-full mt-12 lg:mt-20">
               <div className="space-y-8 reveal-on-scroll">
                 <p className="text-xl lg:text-2xl font-light leading-relaxed text-[var(--text-muted)] max-w-xl">
-                  Computer Engineer experienced in full-stack development and Agile product delivery. Translating business needs into user stories and hands-on coding.
+                  Computer Engineer specialized in full-stack development and Agile product delivery. I bridge the gap between business requirements and technical excellence, managing Jira workflows and leading cross-functional teams to deliver high-impact digital solutions.
                 </p>
                 <Magnetic>
                   <button
@@ -851,7 +851,7 @@ const App = () => {
         <div className="max-w-[1400px] mx-auto text-center space-y-12">
           <h2 className="text-5xl lg:text-9xl font-black tracking-tighter italic split-text text-[var(--text-main)]">Resume.</h2>
           <p className="text-xl lg:text-2xl font-light text-[var(--text-muted)]">
-            Experienced Lead Developer and Junior Product Owner skilled in Jira, Agile delivery, and full-stack engineering across Web and iOS.
+            Experienced Computer Engineer and Junior Product Owner skilled in leading projects through Jira workflows and high-fidelity full-stack engineering.
           </p>
           <Magnetic>
             <a
