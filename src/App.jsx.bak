@@ -1,0 +1,573 @@
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import {
+  Diamond,
+  Menu,
+  X,
+  ExternalLink,
+  Code,
+  Terminal,
+  Database,
+  CheckCircle2,
+  ArrowUpRight,
+  ShoppingBag,
+  Layout,
+  Globe,
+  ChevronDown,
+  Github,
+  Linkedin,
+  Twitter,
+  Mail,
+  Cpu,
+  FastForward,
+  Layers,
+  Sparkles,
+  Palette,
+  Eye,
+  Smartphone,
+  AppWindow,
+  Search,
+  ArrowRight,
+  Command,
+  Monitor,
+  Archive as ArchiveIcon
+} from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+import Lenis from 'lenis';
+import SplitType from 'split-type';
+import logoImg from './assets/lamaportimg.jpeg';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const themes = [
+  { id: 'default', name: 'Noir Ethereal', colors: ['#ffffff', '#020202'] },
+  { id: 'minimalist', name: 'Swiss Swiss', colors: ['#000000', '#ffffff'] },
+  { id: 'neon', name: 'Magenta Glow', colors: ['#ff007b', '#05000a'] },
+  { id: 'gold', name: 'Liquid Gold', colors: ['#d4af37', '#0c0c0c'] }
+];
+
+const Magnetic = ({ children }) => {
+  const magneticRef = useRef(null);
+
+  useEffect(() => {
+    const xTo = gsap.quickTo(magneticRef.current, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });
+    const yTo = gsap.quickTo(magneticRef.current, "y", { duration: 1, ease: "elastic.out(1, 0.3)" });
+
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const { height, width, left, top } = magneticRef.current.getBoundingClientRect();
+      const x = clientX - (left + width / 2);
+      const y = clientY - (top + height / 2);
+      xTo(x * 0.35);
+      yTo(y * 0.35);
+    };
+
+    const handleMouseLeave = () => {
+      xTo(0);
+      yTo(0);
+    };
+
+    magneticRef.current.addEventListener("mousemove", handleMouseMove);
+    magneticRef.current.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      if (magneticRef.current) {
+        magneticRef.current.removeEventListener("mousemove", handleMouseMove);
+        magneticRef.current.removeEventListener("mouseleave", handleMouseLeave);
+      }
+    };
+  }, []);
+
+  return React.cloneElement(children, { ref: magneticRef });
+};
+
+const CaseStudy = ({ project, onClose }) => {
+  const modalRef = useRef(null);
+
+  useGSAP(() => {
+    gsap.from('.modal-content > *', {
+      y: 40,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: 'power4.out',
+    });
+  }, { scope: modalRef });
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl overflow-y-auto overflow-x-hidden"
+      ref={modalRef}
+    >
+      <div className="min-h-screen w-full max-w-[1400px] mx-auto modal-content px-6 lg:px-12 py-12 lg:py-24 text-white">
+        <div className="sticky top-4 lg:fixed lg:top-12 lg:right-12 flex justify-end mb-8 lg:mb-0 z-[210]">
+          <Magnetic>
+            <button
+              onClick={onClose}
+              className="size-12 lg:size-16 rounded-full bg-white text-black flex items-center justify-center hover:scale-110 transition-transform shadow-2xl"
+            >
+              <X size={20} className="lg:hidden" />
+              <X size={24} className="hidden lg:block" />
+            </button>
+          </Magnetic>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+          <div className="lg:col-span-8 space-y-12 lg:space-y-24">
+            <div className="space-y-4 lg:space-y-8">
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] opacity-40 block">Deep Dive // 0{project.id}</span>
+              <h2 className="text-4xl lg:text-7xl font-black leading-[0.9] tracking-tighter text-white">{project.title}</h2>
+            </div>
+
+            <div className="aspect-video rounded-2xl lg:rounded-3xl overflow-hidden border border-white/10 group bg-white/5">
+              <img src={project.image} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+              <div className="p-6 lg:p-8 rounded-2xl border border-white/5 bg-white/5 space-y-4">
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-40 text-white">The Challenge</span>
+                <p className="text-base lg:text-lg font-light leading-relaxed text-white/80">{project.details?.challenge || "No challenge details available."}</p>
+              </div>
+              <div className="p-6 lg:p-8 rounded-2xl border border-white/5 bg-white/5 space-y-4">
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-40 text-white">The Architecture</span>
+                <p className="text-base lg:text-lg font-light leading-relaxed text-white/80">{project.details?.architecture || "Architecture details pending."}</p>
+              </div>
+            </div>
+
+            <div className="space-y-6 lg:space-y-8">
+              <h3 className="text-2xl lg:text-3xl font-black tracking-tight text-white">Technical Implementation</h3>
+              <p className="text-xl lg:text-2xl font-light leading-relaxed text-white/60">
+                {project.details?.longDescription || project.description}
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-4 space-y-8 lg:space-y-12">
+            <div className="p-6 lg:p-8 rounded-2xl border border-white/5 bg-white/5 space-y-8">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-40 block mb-4 text-white">Core Ecosystem</span>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map(tag => <span key={tag} className="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-widest font-black opacity-60 text-white">{tag}</span>)}
+                </div>
+              </div>
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-widest opacity-40 block mb-4 text-white">Services Deployed</span>
+                <ul className="space-y-4">
+                  {project.details?.features?.map(f => (
+                    <li key={f} className="flex items-start gap-3">
+                      <CheckCircle2 size={16} className="mt-1 opacity-40 text-white" />
+                      <span className="text-sm font-medium opacity-80 text-white">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="p-6 lg:p-8 rounded-2xl bg-white text-black space-y-6">
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-40 block">Project Status</span>
+              <div className="flex items-center gap-4">
+                <div className="size-3 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-lg font-black tracking-tighter uppercase">Deployed to Production</span>
+              </div>
+              <button className="w-full py-4 border border-black/10 rounded-full font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-4 hover:bg-black hover:text-white transition-all">
+                Live Prototype <ArrowUpRight size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const ArchiveRow = ({ project, onOpen }) => {
+  const rowRef = useRef(null);
+  const imgRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!imgRef.current) return;
+    const { clientX, clientY } = e;
+
+    // Animate image position to cursor with slight delay
+    gsap.to(imgRef.current, {
+      x: clientX,
+      y: clientY - 100, // Offset to not cover cursor
+      duration: 0.4,
+      ease: "power2.out"
+    });
+  };
+
+  const handleMouseEnter = () => {
+    gsap.to(imgRef.current, { scale: 1, opacity: 1, duration: 0.3 });
+  };
+
+  const handleMouseLeave = () => {
+    gsap.to(imgRef.current, { scale: 0.8, opacity: 0, duration: 0.3 });
+  };
+
+  return (
+    <>
+      <div
+        ref={rowRef}
+        onClick={() => onOpen(project)}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="group relative border-t border-white/10 py-6 lg:py-8 grid grid-cols-1 lg:grid-cols-12 items-center gap-4 cursor-pointer hover:bg-white/5 transition-colors duration-300"
+      >
+        <div className="col-span-1 lg:col-span-2 text-xs lg:text-sm opacity-40 font-mono">20{project.year}</div>
+        <div className="col-span-1 lg:col-span-5 text-xl lg:text-2xl font-bold group-hover:translate-x-4 transition-transform duration-300">{project.title}</div>
+        <div className="hidden lg:flex col-span-3 text-xs uppercase tracking-widest opacity-60 gap-2">
+          {project.tags.slice(0, 2).map((t, i) => <span key={i} className="border border-white/10 px-2 py-1 rounded-full">{t}</span>)}
+        </div>
+        <div className="hidden lg:block col-span-2 text-right opacity-40 group-hover:opacity-100 transition-opacity">
+          <ArrowUpRight className="ml-auto" size={20} />
+        </div>
+      </div>
+
+      {/* Floating Preview Image Portal */}
+      <div
+        ref={imgRef}
+        className="fixed top-0 left-0 w-[300px] h-[200px] pointer-events-none z-[60] rounded-xl overflow-hidden opacity-0 scale-75 origin-center hidden lg:block"
+        style={{ transform: "translate(-50%, -50%)" }}
+      >
+        <img src={project.image} className="w-full h-full object-cover" />
+      </div>
+    </>
+  )
+}
+
+const App = () => {
+  const [currentTheme, setCurrentTheme] = useState('default');
+  const [scrolled, setScrolled] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const containerRef = useRef(null);
+  const cursorRef = useRef(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
+    const moveCursor = (e) => {
+      if (cursorRef.current) {
+        gsap.to(cursorRef.current, { x: e.clientX, y: e.clientY, duration: 0.5, ease: 'power3.out' });
+      }
+    };
+    window.addEventListener('mousemove', moveCursor);
+    return () => window.removeEventListener('mousemove', moveCursor);
+  }, []);
+
+  useGSAP(() => {
+    const split = new SplitType('.split-text', { types: 'lines,words', lineClass: 'line-wrapper' });
+    gsap.from('.line-wrapper .word', {
+      y: 100,
+      opacity: 0,
+      duration: 1.2,
+      stagger: 0.05,
+      ease: 'power4.out',
+      delay: 0.5
+    });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach((reveal) => {
+      gsap.from(reveal, {
+        scrollTrigger: { trigger: reveal, start: 'top 85%', toggleActions: 'play none none none' },
+        y: 60, opacity: 0, duration: 1.5, ease: 'power3.out'
+      });
+    });
+
+    return () => split.revert();
+  }, { scope: containerRef });
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    document.body.className = currentTheme === 'default' ? '' : `theme-${currentTheme}`;
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentTheme]);
+
+  const projects = [
+    {
+      id: 1,
+      year: "24",
+      title: "Homesta Full Project",
+      type: "application",
+      category: "Real Estate Ecosystem",
+      tags: ["AI Integration", "React Native", ".NET"],
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB2vp-gci3aphraxITiUdHwXsoCrjjElvIcZlfhgZ5V7L51X0tXhJCqn4uAzhZXBjRVZeb1Zxi0wYadgcSMmrbkkDX0PKvrVBWxFJ6zspRjliD4iAjcIGJu0eIhky48SAEzELdLFMqZBO2VvpZD_oKTntHgADDvWbL53NuQxXyaZaE1VfCKED2aKk9Mx8VdmRwMgUO2OIxLxZyQHpTNN6HX_T4pWBz6bAE9TtMIAzUxQxxbHEZNMHwvCNO2T0QFc07cgTWdFy75xuni",
+      description: "Complete real estate ecosystem integrating mobile, frontend, backend, and AI recommendation engines.",
+      details: {
+        challenge: "Fragmented real estate data silos prevented seamless cross-platform user experiences.",
+        architecture: "Distributed microservices with .NET Core API and a shared event bus for real-time AI processing.",
+        longDescription: "Homesta isn't just a CRM; it's a unified system designed for massive scalability. I architected the multi-tier sync logic between the web dashboard and the field-agent mobile apps, ensuring sub-second latency for AI-driven price recommendations.",
+        features: ["Cross-platform sync", "AI valuation engine", "Automated document workflows", "High-throughput search"]
+      }
+    },
+    {
+      id: 2,
+      year: "23",
+      title: "Sanity i18n Arabic",
+      type: "website",
+      category: "CMS & Localization",
+      tags: ["GROQ", "Document i18n"],
+      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB2vp-gci3aphraxITiUdHwXsoCrjjElvIcZlfhgZ5V7L51X0tXhJCqn4uAzhZXBjRVZeb1Zxi0wYadgcSMmrbkkDX0PKvrVBWxFJ6zspRjliD4iAjcIGJu0eIhky48SAEzELdLFMqZBO2VvpZD_oKTntHgADDvWbL53NuQxXyaZaE1VfCKED2aKk9Mx8VdmRwMgUO2OIxLxZyQHpTNN6HX_T4pWBz6bAE9TtMIAzUxQxxbHEZNMHwvCNO2T0QFc07cgTWdFy75xuni",
+      description: "Internationalizing complex content types with document-level translations and GROQ optimization.",
+      details: {
+        challenge: "Managing RTL (Arabic) content alongside LTR structures while maintaining GROQ query performance.",
+        architecture: "Document-level internationalization strategy using Sanity's translation metadata pattern.",
+        longDescription: "This project required a custom Sanity Studio configuration to handle bi-directional text flows. I optimized the GROQ retrieval layer to automatically fetch the correct translation based on user locale without double-requesting data.",
+        features: ["RTL layout architecting", "Localization metadata layer", "GROQ-based caching", "Custom Sanity plugins"]
+      }
+    },
+    // Adding dummy archive projects to demonstrate the scale
+    { id: 3, year: "23", title: "Helios Dashboard", tags: ["React", "D3.js"], image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop", details: { challenge: "Data viz at scale.", architecture: "React + D3", longDescription: "High performance dashboard.", features: ["Real-time data"] } },
+    { id: 4, year: "22", title: "Nexus API Gateway", tags: ["Node.js", "Redis"], image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop", details: { challenge: "API Rate limiting.", architecture: "Node + Redis", longDescription: "Scalable gateway.", features: ["Rate limiting"] } },
+    { id: 5, year: "22", title: "Vanguard Mobile", tags: ["React Native", "Firebase"], image: "https://images.unsplash.com/photo-1526498460520-4c246339dccb?q=80&w=2670&auto=format&fit=crop", details: { challenge: "Offline first.", architecture: "RN + Firebase", longDescription: "Offline sync.", features: ["Offline Mode"] } },
+    { id: 6, year: "21", title: "Quantum Design System", tags: ["Storybook", "Figma"], image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2574&auto=format&fit=crop", details: { challenge: "Consistency.", architecture: "Monorepo", longDescription: "Unified UI.", features: ["Tokens"] } },
+  ];
+
+  const featuredProjects = projects.slice(0, 2);
+  const archiveProjects = projects.slice(2);
+
+  return (
+    <div ref={containerRef} className="relative min-h-screen overflow-x-hidden selection:bg-white selection:text-black">
+      <div ref={cursorRef} className="custom-cursor hidden lg:block" />
+      <div className="noise-overlay" />
+
+      <AnimatePresence>
+        {selectedProject && <CaseStudy project={selectedProject} onClose={() => setSelectedProject(null)} />}
+      </AnimatePresence>
+
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 hero-depth-gradient opacity-60" />
+      </div>
+
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[1px] bg-white z-[100] origin-left"
+        style={{ scaleX: useSpring(useScroll().scrollYProgress, { stiffness: 100, damping: 30 }) }}
+      />
+
+      <div className="fixed bottom-12 right-12 z-[60] flex items-center gap-4 bg-white/5 backdrop-blur-3xl px-6 py-3 rounded-full border border-white/10 shadow-2xl">
+        {themes.map(theme => (
+          <Magnetic key={theme.id}>
+            <button
+              onClick={() => setCurrentTheme(theme.id)}
+              className={`size-4 rounded-full transition-all duration-500 ring-offset-2 ${currentTheme === theme.id ? 'ring-2 ring-white scale-125' : 'scale-100'}`}
+              style={{ backgroundColor: theme.colors[0], ringColor: theme.colors[0] }}
+            />
+          </Magnetic>
+        ))}
+      </div>
+
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-1000 ${scrolled ? 'glass-nav py-4' : 'py-12'}`}>
+        <div className="max-w-[1600px] mx-auto flex items-center justify-between px-6 lg:px-12">
+          <div className="flex items-center gap-4 group">
+            <div className="size-10 bg-white flex items-center justify-center rounded-lg overflow-hidden group-hover:rotate-[-10deg] transition-transform duration-500">
+              <img src={logoImg} alt="Lama Darawsheh" className="w-full h-full object-cover grayscale" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-black tracking-[0.2em] text-white">LAMA DARAWSHEH</span>
+              <span className="text-[8px] font-bold tracking-[0.4em] opacity-30">SYSTEM ARCHITECT</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-12">
+            <div className="hidden lg:flex items-center gap-16">
+              {['Works', 'Insights', 'Philosophy'].map((item) => (
+                <a key={item} href="#work" className="text-[10px] font-bold uppercase tracking-[0.4em] opacity-40 hover:opacity-100 transition-all">
+                  {item}
+                </a>
+              ))}
+            </div>
+            <Magnetic>
+              <button
+                className="size-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500"
+              >
+                <Command size={16} />
+              </button>
+            </Magnetic>
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 lg:px-12 pt-32">
+        <div className="w-full max-w-[1400px] relative">
+          <div className="flex flex-col items-start gap-8 lg:gap-12">
+            <div className="flex items-center gap-6 overflow-hidden">
+              <div className="h-[1px] w-12 bg-white/20" />
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] opacity-40">AESTHETICS & ARCHITECTURE</span>
+            </div>
+
+            <h1 className="text-[14vw] lg:text-[9vw] font-black leading-[0.9] lg:leading-[0.8] tracking-[-0.06em] text-white split-text">
+              Curating <br /> <span className="text-reveal-gradient italic font-light">Digital Flow.</span>
+            </h1>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 w-full mt-12 lg:mt-20">
+              <div className="space-y-8 reveal-on-scroll">
+                <p className="text-xl lg:text-2xl font-light leading-relaxed text-white/60 max-w-xl">
+                  Bridging the gap between high-throughput system design and visceral user experiences. Operating at the intersection of logic and luxury.
+                </p>
+                <Magnetic>
+                  <button
+                    onClick={() => document.getElementById('work').scrollIntoView({ behavior: 'smooth' })}
+                    className="flex items-center gap-6 group py-4"
+                  >
+                    <span className="text-xs font-black uppercase tracking-[0.4em]">Explore Selected Archive</span>
+                    <div className="size-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+                      <ArrowRight size={16} />
+                    </div>
+                  </button>
+                </Magnetic>
+              </div>
+
+              <div className="hidden lg:flex justify-end pr-20 reveal-on-scroll">
+                <div className="relative z-10 size-64 rounded-3xl overflow-hidden glass-card p-2">
+                  <div className="w-full h-full rounded-2xl overflow-hidden border border-white/5 bg-black">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-40">
+                      <Monitor size={80} strokeWidth={1} />
+                    </div>
+                    <motion.div
+                      animate={{ y: [-100, 100], opacity: [0, 1, 0] }}
+                      transition={{ duration: 4, repeat: Infinity }}
+                      className="w-full h-[1px] bg-white shadow-[0_0_20px_white]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-10 left-6 lg:bottom-20 lg:left-12">
+          <ChevronDown className="size-6 opacity-20 animate-bounce" />
+        </div>
+      </section>
+
+      <section id="work" className="py-32 lg:py-60 px-6 lg:px-12 max-w-[1600px] mx-auto">
+        <div className="mb-20 lg:mb-40 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 lg:gap-16 reveal-on-scroll">
+          <h3 className="text-5xl lg:text-9xl font-black tracking-tighter leading-none split-text">
+            Selected <br /> <span className="opacity-10 italic font-light">Artifacts.</span>
+          </h3>
+          <div className="max-w-md text-left lg:text-right">
+            <p className="text-white/40 text-sm lg:text-lg uppercase tracking-widest leading-loose">
+              High-fidelity engineering solutions for global systems. Each project is a testament to precision and performance.
+            </p>
+          </div>
+        </div>
+
+        {/* Featured Projects (Big Cards) */}
+        <div className="grid grid-cols-1 gap-32 lg:gap-60 mb-32 lg:mb-60">
+          {featuredProjects.map((project, idx) => (
+            <div
+              key={project.id}
+              className={`flex flex-col ${idx % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center`}
+            >
+              <div className="w-full lg:w-3/5 group cursor-crosshair overflow-hidden reveal-on-scroll" onClick={() => setSelectedProject(project)}>
+                <div className={`${project.type === 'website' ? 'browser-frame' : 'mobile-frame shadow-[0_50px_100px_rgba(0,0,0,0.8)] border-white/10'} transition-all duration-1000`}>
+                  <img src={project.image} className="w-full grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000 parallax-img" />
+                </div>
+              </div>
+
+              <div className="w-full lg:w-2/5 space-y-8 lg:space-y-12 reveal-on-scroll">
+                <div className="space-y-4">
+                  <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.6em] block">Case Study // 0{project.id}</span>
+                  <h4 className="text-4xl lg:text-6xl font-black tracking-tighter leading-none cursor-pointer hover:text-white/80 transition-colors" onClick={() => setSelectedProject(project)}>{project.title}</h4>
+                </div>
+                <p className="text-lg lg:text-xl text-white/60 font-light leading-relaxed">{project.description}</p>
+                <div className="flex flex-wrap gap-4">
+                  {project.tags.map(tag => (
+                    <span key={tag} className="px-4 py-2 lg:px-6 rounded-full border border-white/5 bg-white/5 text-[9px] font-black uppercase tracking-widest opacity-40">{tag}</span>
+                  ))}
+                </div>
+                <Magnetic>
+                  <button onClick={() => setSelectedProject(project)} className="flex items-center gap-6 py-4 border-b border-white/10 w-full group">
+                    <span className="text-xs font-black uppercase tracking-[0.4em]">View Project Detail</span>
+                    <ArrowUpRight className="opacity-20 group-hover:opacity-100 transition-all" size={20} />
+                  </button>
+                </Magnetic>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Archive Section (Table View for "Too Many Projects") */}
+        <div className="reveal-on-scroll mt-32 lg:mt-60">
+          <div className="flex items-center gap-6 mb-12 lg:mb-20">
+            <div className="h-[1px] w-12 bg-white/20" />
+            <span className="text-[10px] font-black uppercase tracking-[0.6em] opacity-40">FULL ARCHIVE</span>
+          </div>
+
+          <div className="w-full overflow-x-auto">
+            {archiveProjects.map((project) => (
+              <ArchiveRow key={project.id} project={project} onOpen={setSelectedProject} />
+            ))}
+          </div>
+        </div>
+
+      </section>
+
+      <section className="py-32 lg:py-60 px-6 lg:px-12 bg-white text-black relative z-10">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-40 items-start">
+          <h5 className="text-5xl lg:text-9xl font-black leading-[0.9] lg:leading-[0.8] tracking-tighter split-text">
+            The <br />Logic of <br /> <span className="opacity-20 italic">Beauty.</span>
+          </h5>
+          <div className="space-y-12 lg:space-y-20 pt-4 lg:pt-12 reveal-on-scroll">
+            <p className="text-2xl lg:text-5xl font-light leading-tight">
+              "I believe that architecture isn't just about build quality—it's about the <span className="font-black">visceral response</span> to complex systems."
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {[
+                { label: 'Ecosystems', desc: 'Thinking in multi-repo, distributed layers instead of single instances.' },
+                { label: 'Experience', desc: 'Crafting interfaces that feel natural, almost biological, in their flow.' }
+              ].map(t => (
+                <div key={t.label} className="space-y-4 border-l border-black/10 pl-8">
+                  <span className="text-[10px] font-black uppercase tracking-widest opacity-40">{t.label}</span>
+                  <p className="text-sm font-medium leading-relaxed">{t.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="py-32 lg:py-60 bg-black text-center relative overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+          <h2 className="text-[30vw] font-black tracking-[-0.1em]">LAMA</h2>
+        </div>
+        <div className="relative z-10 space-y-12 reveal-on-scroll">
+          <span className="text-[10px] font-black uppercase tracking-[1em] text-white/20">READY FOR GLOBAL SCALE?</span>
+          <h4 className="text-5xl md:text-[10vw] font-black text-white leading-none tracking-tighter px-4">Let's connect.</h4>
+          <div className="flex justify-center gap-12 pt-20">
+            {['GitHub', 'LinkedIn', 'Twitter'].map(s => (
+              <Magnetic key={s}>
+                <a href="#" className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40 hover:opacity-100 transition-all hover:translate-y-[-4px] block">{s}</a>
+              </Magnetic>
+            ))}
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
