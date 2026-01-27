@@ -707,7 +707,7 @@ const App = () => {
           <div className="flex flex-col items-start gap-8 lg:gap-12">
             <div className="flex items-center gap-6 overflow-hidden">
               <div className="h-[1px] w-12 bg-[var(--border-color)]" />
-              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[var(--text-muted)]">AESTHETICS & ARCHITECTURE</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-[var(--text-muted)]">ENGINEERING & STRATEGY</span>
             </div>
 
             <h1 className="text-[14vw] lg:text-[9vw] font-black leading-[0.9] lg:leading-[0.8] tracking-[-0.06em] text-[var(--text-main)] split-text">
