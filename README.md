@@ -21,16 +21,19 @@ Computer Engineer experienced in full-stack development and Agile product delive
 *Technical Lead / Co-Lead Frontend Engineer*
 - **Stack:** React 19, Vite, Tailwind CSS, ASP.NET Core, SQL Server.
 - **Impact:** Co-led development of a large-scale platform supporting Users, Sellers, and Admins. Defined frontend–backend integration flows and collaborated on API contracts and data modeling.
+- **Live Demo:** [homesta-website-v-1.vercel.app](https://homesta-website-v-1.vercel.app)
 
 ### 2. EduNEXA — Learning Management System (LMS)
 *Team Lead & Full-Stack Developer*
 - **Stack:** React, Tailwind CSS, REST APIs, JWT, Jira.
 - **Impact:** Led an Agile team to design and launch an LMS MVP within a 2-week sprint. Managed task prioritization, daily coordination, and progress reporting.
+- **Live Demo:** [edunexa-v1.vercel.app](https://edunexa-v1.vercel.app)
 
 ### 3. Bot & Beam (TechBlog Future) — AI-Augmented Coding Platform
 *Project Lead*
 - **Stack:** React, Vite, Next.js, Sanity CMS.
 - **Impact:** Led end-to-end delivery and migrated the platform from React SPA to Next.js to improve SEO, performance, and scalability.
+- **Live Demo:** [botandbeam.vercel.app](https://botandbeam.vercel.app)
 
 ---
 

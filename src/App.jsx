@@ -444,6 +444,7 @@ const App = () => {
       tags: ["React.js", "Tailwind CSS", "REST APIs", "JWT", "Jira", "Agile"],
       image: edunexaImg,
       description: "Team Lead for an Agile team. Designed and launched an LMS MVP within a strict 2-week sprint using Jira workflows.",
+      liveUrl: "https://edunexa-v1.vercel.app",
       githubUrl: "https://github.com/lamadarawsheh/EduNEXA",
       details: {
         challenge: "Team Lead role: Managing task prioritization, daily coordination, and progress reporting under extreme time pressure for a 2-week MVP delivery.",
